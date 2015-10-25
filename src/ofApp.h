@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -22,6 +23,12 @@ class ofApp : public ofBaseApp{
     ofImage person;
     ofFbo feedbackBuffer;
     ofShader hueShader;
+    ofShader personShader;
     ofVideoPlayer depthPlayer;
+    
+    ofxPanel gui;
+    ofxFloatSlider shiftAmount;
+    
+    bool showGUI;
 		
 };
