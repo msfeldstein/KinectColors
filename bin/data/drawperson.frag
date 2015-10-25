@@ -28,6 +28,8 @@ vec3 hsv2rgb(vec3 c)
 void main()
 {
   vec4 color = texture(tex0, varyingtexcoord);
-  color.rgb = vec3(0.0);
+  float a = floor(color.r * 2.0);
+  color.rgb = vec3(0.1);
+  color.a = a;
   outputColor = color;
 }

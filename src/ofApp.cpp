@@ -49,17 +49,17 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofClear(0, 0, 0);
-    ofDisableBlendMode();
-    ofDisableAlphaBlending();
+
+    ofClear(0, 0, 0, 1.0);
     ofPushMatrix();
     ofScale(1.0, -1.0);
     ofTranslate(0.0, -ofGetHeight());
-    ofDisableAlphaBlending();
-    glDisable(GL_BLEND);
-    ofEnableBlendMode(OF_BLENDMODE_DISABLED);
     feedbackBuffer.draw(0, 0);
     ofPopMatrix();
+    ofEnableAlphaBlending();
+    personShader.begin();
+    depthPlayer.draw(0, 0);
+    personShader.end();
     if (showGUI) gui.draw();
 }
 
