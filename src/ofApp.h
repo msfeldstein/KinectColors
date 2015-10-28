@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxKinect.h"
+#include "ofxOpenCv.h"
 
 class ofApp : public ofBaseApp{
 
@@ -28,6 +30,20 @@ class ofApp : public ofBaseApp{
     
     ofxPanel gui;
     ofxFloatSlider shiftAmount;
+    ofxFloatSlider fadeAmount;
+    
+    ofxKinect kinect;
+    
+    ofxCvColorImage colorImg;
+    
+    ofxCvGrayscaleImage grayImage; // grayscale depth image
+    ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
+    ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
+    
+    int angle;
+    bool bThreshWithOpenCV;
+    int nearThreshold;
+    int farThreshold;
     
     bool showGUI;
 		
