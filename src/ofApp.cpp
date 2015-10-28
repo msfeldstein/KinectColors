@@ -97,7 +97,7 @@ void ofApp::update(){
                 }
             }
         }
-        
+        grayImage.blur(7);
         // update the cv images
         grayImage.flagImageChanged();
         
