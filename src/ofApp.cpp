@@ -32,14 +32,14 @@ void ofApp::setup(){
     grayThreshNear.allocate(kinect.width, kinect.height);
     grayThreshFar.allocate(kinect.width, kinect.height);
     
-    nearThreshold = 230;
-    farThreshold = 70;
+    nearThreshold = 255;
+    farThreshold = 90;
     bThreshWithOpenCV = true;
     
     ofSetFrameRate(60);
     
     // zero the tilt on startup
-    angle = 0;
+    angle = 8;
     kinect.setCameraTiltAngle(angle);
 //
     showGUI = false;
@@ -154,6 +154,12 @@ void ofApp::keyPressed(int key){
         ofToggleFullscreen();
     } else if (key == 'g') {
         showGUI = !showGUI;        
+    } else if (key == ',') {
+        farThreshold++;
+        std::cout<<"Far Threshold"<<farThreshold<<"\n";
+    } else if (key == '.') {
+        farThreshold--;
+        std::cout<<"Far Threshold"<<farThreshold<<"\n";
     }
 
 }
