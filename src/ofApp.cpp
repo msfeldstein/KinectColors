@@ -26,7 +26,6 @@ void ofApp::setup(){
     kinect2.init();
     kinect2.open();
 #endif
-    
     colorImg.allocate(kinect.width, kinect.height);
     grayImage.allocate(kinect.width, kinect.height);
     grayThreshNear.allocate(kinect.width, kinect.height);
@@ -39,7 +38,7 @@ void ofApp::setup(){
     ofSetFrameRate(60);
     
     // zero the tilt on startup
-    angle = 8;
+    angle = 0;
     kinect.setCameraTiltAngle(angle);
 //
     showGUI = false;
@@ -49,7 +48,6 @@ void ofApp::setup(){
     
     feedbackBuffer.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
     feedbackBuffer.getTextureReference().setTextureMinMagFilter( GL_LINEAR, GL_LINEAR );
-
     feedbackBuffer.bind();
     ofClear(0, 0, 0, 1);
     feedbackBuffer.unbind();
@@ -120,13 +118,13 @@ void ofApp::update(){
     hueShader.begin();
     hueShader.setUniform1f("amount", shiftAmount);
     hueShader.setUniform1f("fadeAmount", fadeAmount);
-    feedbackBuffer.draw(0, 0);
+    feedbackBuffer.draw(0, 0, feedbackBuffer.getWidth(), feedbackBuffer.getHeight());
     hueShader.end();
     ofPopMatrix();
     ofPushMatrix();
     ofPushStyle();
     ofEnableBlendMode(OF_BLENDMODE_ADD);
-    grayImage.draw(0, 0);
+    grayImage.draw(0, 0, feedbackBuffer.getWidth(), feedbackBuffer.getHeight());
     ofDisableBlendMode();
     ofPopStyle();
     ofPopMatrix();
@@ -139,11 +137,11 @@ void ofApp::draw(){
     ofPushMatrix();
     ofScale(1.0, -1.0);
     ofTranslate(0.0, -ofGetHeight());
-    feedbackBuffer.draw(0, 0);
+    feedbackBuffer.draw(0, 0, ofGetWidth(), ofGetHeight());
     ofPopMatrix();
     ofEnableAlphaBlending();
     personShader.begin();
-    grayImage.draw(0, 0);
+    grayImage.draw(0, 0, ofGetWidth(), ofGetHeight());
     personShader.end();
     if (showGUI) gui.draw();
 }
