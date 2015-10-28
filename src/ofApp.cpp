@@ -2,30 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
-    // enable depth->video image calibration
     kinect.setRegistration(true);
-    
     kinect.init();
-    //kinect.init(true); // shows infrared instead of RGB video image
-    //kinect.init(false, false); // disable video image (faster fps)
+    kinect.open();
     
-    kinect.open();		// opens first available kinect
-    //kinect.open(1);	// open a kinect by id, starting with 0 (sorted by serial # lexicographically))
-    //kinect.open("A00362A08602047A");	// open a kinect using it's unique serial #
-    
-    // print the intrinsic IR sensor values
-    if(kinect.isConnected()) {
-        ofLogNotice() << "sensor-emitter dist: " << kinect.getSensorEmitterDistance() << "cm";
-        ofLogNotice() << "sensor-camera dist:  " << kinect.getSensorCameraDistance() << "cm";
-        ofLogNotice() << "zero plane pixel size: " << kinect.getZeroPlanePixelSize() << "mm";
-        ofLogNotice() << "zero plane dist: " << kinect.getZeroPlaneDistance() << "mm";
-    }
-    
-#ifdef USE_TWO_KINECTS
-    kinect2.init();
-    kinect2.open();
-#endif
     colorImg.allocate(kinect.width, kinect.height);
     grayImage.allocate(kinect.width, kinect.height);
     grayThreshNear.allocate(kinect.width, kinect.height);
@@ -33,7 +13,6 @@ void ofApp::setup(){
     
     nearThreshold = 255;
     farThreshold = 90;
-    bThreshWithOpenCV = true;
     
     ofSetFrameRate(60);
     
@@ -73,28 +52,11 @@ void ofApp::update(){
         // load grayscale depth image from the kinect source
         grayImage.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
         
-        // we do two thresholds - one for the far plane and one for the near plane
-        // we then do a cvAnd to get the pixels which are a union of the two thresholds
-        if(bThreshWithOpenCV) {
-            grayThreshNear = grayImage;
-            grayThreshFar = grayImage;
-            grayThreshNear.threshold(nearThreshold, true);
-            grayThreshFar.threshold(farThreshold);
-            cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImage.getCvImage(), NULL);
-        } else {
-            
-            // or we do it ourselves - show people how they can work with the pixels
-            unsigned char * pix = grayImage.getPixels();
-            
-            int numPixels = grayImage.getWidth() * grayImage.getHeight();
-            for(int i = 0; i < numPixels; i++) {
-                if(pix[i] < nearThreshold && pix[i] > farThreshold) {
-                    pix[i] = 255;
-                } else {
-                    pix[i] = 0;
-                }
-            }
-        }
+        grayThreshNear = grayImage;
+        grayThreshFar = grayImage;
+        grayThreshNear.threshold(nearThreshold, true);
+        grayThreshFar.threshold(farThreshold);
+        cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImage.getCvImage(), NULL);
         grayImage.blur(7);
         // update the cv images
         grayImage.flagImageChanged();

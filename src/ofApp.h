@@ -41,7 +41,6 @@ class ofApp : public ofBaseApp{
     ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
     
     int angle;
-    bool bThreshWithOpenCV;
     int nearThreshold;
     int farThreshold;
     
